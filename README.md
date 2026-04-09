@@ -38,33 +38,3 @@ This repository contains the code used to run the analysis performed and to plot
 To install all the packages used in this work you can directly type in your terminal:
 `pip install -r requirements.txt`
 
-
-
----
-## Figures
-
-### Figure 1 - XXXX
-![Fig. 1](./Figures_paper/Fig1.jpg)
-*Generic view.*
-
-
-### Figure 2 - XXXX
-![Fig. 2](./Figures_paper/Fig2.jpg)
-*(A) Group-level analysis.*
-
-
-### Figure 3 - 
-![Fig. 3](./Figures_paper/Fig3.jpg)
-*For each *
-
-
-### Figure 4 - 
-![Fig. 4](./Figures_paper/Fig4.jpg)
-*(A) Performance *
-
-
-### Figure 5 - 
-![Fig. 5](./Figures_paper/Fig5.jpg)
-*(A) Within-sessio*
-
-
