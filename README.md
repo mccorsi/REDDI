@@ -6,7 +6,8 @@ This repository contains the code and supporting documents associated with the f
 
 Please cite as:
 
-Corsi, M.-C., Chevallier, S., De Vico Fallani, F. & Yger, F. (2022). Functional connectivity ensemble method to enhance BCI performance (FUCONE). biorXiv. https://doi.org/XXXXX
+Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona Bonavita, Francesca Trojsi, Matteo Demuru, Emahnuel Troisi Lopez, Sylvain Chevallier, Florian Yger, Ausra
+Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. biorXiv. https://doi.org/XXXXX
 
 
 ---
