@@ -1,7 +1,7 @@
 Sistemato:
 - ambiente virtuale installato dai requirements sembra funzionare
 
-- Tutti i codici per addestrare LDA SVM XGBoost Reimann funzionano
+- Tutti i codici per addestrare LDA SVM XGBoost Reimann NN funzionano
   - sistemato i path
   - le relative librerie necessarie sono state sistemate
 
@@ -9,15 +9,11 @@ Sistemato:
 
 
 Da fare:
-- Controlla codici addestramento NN
-  - sistema codici per librerie necessarie
-  - rivedi dove hai messo le tue cose, quelle giuste con Balanced accuracy
-  - direzione giusta - commit su TURNING di GIO punto da dove trovare le cose sulle reti NN che ho fatto aggiustando DIMA
-  - forse 010126 commit è quello o (controlla dopo)
 
 - controlla per i codici dei plot cosa serve 
   - quali codici
   - che librerie ulteriori inserire
+  - oof_confusion_matrix_ensemble.png figure 6A, produced in the folder Results_new/figures/Corr_Mat/ when runnin the code ensemble_cov_corr_Riemann.py
 
 - rivedi se clonando da github su MAC funziona tutto
  - ambiente virtuale
