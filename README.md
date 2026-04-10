@@ -34,6 +34,7 @@ TODO
 
 ---
 ## Code
+Use python 3.11.9
 This repository contains the code used to run the analysis performed and to plot the figures.
 To install all the packages used in this work you can directly type in your terminal:
 `pip install -r requirements.txt`
