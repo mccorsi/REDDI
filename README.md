@@ -7,7 +7,7 @@ This repository contains the code and supporting documents associated with the f
 Please cite as:
 
 Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona Bonavita, Francesca Trojsi, Matteo Demuru, Emahnuel Troisi Lopez, Sylvain Chevallier, Florian Yger, Ausra
-Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. biorXiv. https://doi.org/XXXXX
+Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. medXiv. [https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1](https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1)
 
 
 ---
@@ -31,7 +31,7 @@ del Benessere, Napoli, Italy; Institute of Applied Sciences and Intelligent Syst
 
 ---
 ## Abstract
-TODO
+Neurodegenerative diseases such as Mild Cognitive Impairment (MCI), Multiple Sclerosis (MS), Parkinson s Disease (PD), and Amyotrophic Lateral Sclerosis (ALS) are becoming more prevalent. Each of these diseases, despite its specific pathophysiological mechanisms, leads to widespread reorganization of brain activity. However, the corresponding neurophysiological signatures of these changes have been elusive. As a consequence, to date, it is not possible to effectively distinguish these diseases from neurophysiological data alone. This work uses Magnetoencephalography (MEG) resting-state data, combined with interpretable machine learning techniques, to support differential diagnosis. We expand on previous work and design a Riemannian geometry-based classification pipeline. The pipeline is fed with typical connectivity metrics, such as covariance or correlation matrices. To maintain interpretability while reducing feature dimensionality, we introduce a classifier-independent feature selection procedure that uses effect sizes derived from the Kruskal-Wallis test. The ensemble classification pipeline, called REDDI, achieved a mean balanced accuracy of 0.81 (+/-0.04) across five folds, representing a 13% improvement over the state-of-the-art, while remaining clinically transparent. As such, our approach achieves reliable, interpretable, data-driven, operator-independent decision-support tools in neurology.
 
 ---
 ## Code
