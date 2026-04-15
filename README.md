@@ -19,7 +19,7 @@ del Benessere, Napoli, Italy
 * Simona Bonavita, Neurologist, University of Campania “Luigi Vanvitelli”, Department of Advanced Medical and Surgical Sciences, Naples, Italy
 * Francesca Trojsi, Neurologist, University of Campania “Luigi Vanvitelli”, Department of Advanced Medical and Surgical Sciences, Naples, Italy
 * Matteo Demuru, Postdoctoral researcher, Università degli Studi di Napoli Parthenope, Dipartimento delle Scienze Mediche, Motorie e del Benessere, Napoli, Italy
-* [Emahnuel Troisi Lopez, Associate professor, Department of Education and Sport Sciences, Pegaso University, 80143 Naples, Italy
+* Emahnuel Troisi Lopez, Associate professor, Department of Education and Sport Sciences, Pegaso University, 80143 Naples, Italy
 * [Sylvain Chevallier](https://sylvchev.github.io), Professor, LISN, Paris-Saclay University
 * [Florian Yger](http://www.yger.fr), Associate professor, LAMSADE, Paris-Dauphine University
 * Ausra Saudargienė, Professor, Neuroscience Institute, Lithuanian University of Health Sciences, Kaunas, Lithuania
