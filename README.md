@@ -2,12 +2,11 @@
 ---
 This repository contains the code and supporting documents associated with the following manuscript:
 
-- LINK preprint
+- Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona Bonavita, Francesca Trojsi, Matteo Demuru, Emahnuel Troisi Lopez, Sylvain Chevallier, Florian Yger, Ausra Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. medXiv. [https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1](https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1)
 
 Please cite as:
 
-Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona Bonavita, Francesca Trojsi, Matteo Demuru, Emahnuel Troisi Lopez, Sylvain Chevallier, Florian Yger, Ausra
-Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. medXiv. [https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1](https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1)
+Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona Bonavita, Francesca Trojsi, Matteo Demuru, Emahnuel Troisi Lopez, Sylvain Chevallier, Florian Yger, Ausra Saudargienė, Pierpaolo Sorrentino, Marie-Constance Corsi (2026). REDDI: A Riemannian Ensemble Learning Framework for Interpretable Differential Diagnosis of Neurodegenerative Diseases. medXiv. [https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1](https://www.medrxiv.org/content/10.64898/2026.04.10.26350617v1)
 
 
 ---
