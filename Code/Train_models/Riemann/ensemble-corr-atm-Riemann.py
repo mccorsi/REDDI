@@ -4,7 +4,14 @@ from pyriemann.classification import TSClassifier
 import os
 import sys
 
-sys.path.append(os.path.abspath("Code/_libs"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print( current_dir)
+libs_path = os.path.join(current_dir, "..","..","_libs")
+print(libs_path)
+sys.path.append(libs_path)
+
+save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
+os.makedirs(save_dir_base, exist_ok=True)
 
 from ensemble import EnsembleClassifier
 from utils import load_atms, load_corr_mats
@@ -48,12 +55,12 @@ ensemble = EnsembleClassifier(model_corr_mat, model_atm, feature_names=['correla
 ensemble.fit(X_corr_mat, X_atm_mat, y_corr_mat, cv) 
 
 # Plot and save Results_new
-ensemble.plot_validation_metrics(output_path=f"Results_new/figures/output_Corr_ATM_ensamble/riemann/")
-ensemble.plot_oof_confusion_matrices(y_corr_mat, output_path=f"Results_new/figures/output_Corr_ATM_ensamble/riemann/")
+ensemble.plot_validation_metrics(output_path=save_dir_base+f"/figures/output_Corr_ATM_ensamble/riemann/")
+ensemble.plot_oof_confusion_matrices(y_corr_mat, output_path=save_dir_base+f"/figures/output_Corr_ATM_ensamble/riemann/")
 
-ensemble.save_metrics(output_path=f"Results_new/logs/output_Corr_ATM_ensamble/riemann/")
+ensemble.save_metrics(output_path=save_dir_base+f"/logs/output_Corr_ATM_ensamble/riemann/")
 
-ensemble.store_oof_probabilities(output_path=f"Results_new/logs/output_Corr_ATM_ensamble/riemann/")
+ensemble.store_oof_probabilities(output_path=save_dir_base+f"/logs/output_Corr_ATM_ensamble/riemann/")
 
 cv_scores = ensemble.get_cv_scores()
 print(f"Cross-validation scores: {cv_scores}")

@@ -1,13 +1,21 @@
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import sys
 
 ###################################
 # Used to produce figure 6B
 ###################################
 
-# Load data
 json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print( current_dir)
+json_path = os.path.join(current_dir, "..","..",json_path)
+save_dir = os.path.join(current_dir, "..","..","Images")
+os.makedirs(save_dir, exist_ok=True)
+
+# Load data
 with open(json_path, 'r') as f:
     data = json.load(f)
 
@@ -75,6 +83,6 @@ for i in range(num_classes):
     for j in range(num_classes):
         plt.text(j, i, f"{avg_probs[i, j]*100:.1f}%", ha="center", va="center", color="black")
 
-plt.savefig('Images/TSClassifier_average_probabilities.png', bbox_inches='tight')
+plt.savefig(save_dir + "TSClassifier_average_probabilities.png", bbox_inches='tight')
 
 plt.show()

@@ -7,7 +7,14 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.optimizers import Adam
 warnings.filterwarnings("ignore")
 
-sys.path.append(os.path.abspath("Code/_libs"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print( current_dir)
+libs_path = os.path.join(current_dir, "..","..","_libs")
+print(libs_path)
+sys.path.append(libs_path)
+
+save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
+os.makedirs(save_dir_base, exist_ok=True)
 
 from utils import load_cov_mats, load_corr_mats, load_atms, upper_triangular_flatten
 from select_features import FC_DimRed
@@ -148,7 +155,7 @@ for name, X in datasets.items():
     print(f"{name} Simple NN CV F1 training: {f1_train_simple.mean():.4f} ± {f1_train_simple.std():.4f}")
 
     # Save
-    Simple_out_dir = f"Results_new/NN/{name}/SimpleNN/"
+    Simple_out_dir = save_dir_base+f"/NN/{name}/SimpleNN/"
     os.makedirs(Simple_out_dir, exist_ok=True)
 
     np.save(os.path.join(Simple_out_dir, "cv_balanced_accuracy_val.npy"), bal_acc_val_simple)
@@ -185,7 +192,7 @@ for name, X in datasets.items():
     print(f"{name} Simple NN CV F1 training: {f1_train_deep.mean():.4f} ± {f1_train_deep.std():.4f}")
 
     # Save
-    Deep_out_dir = f"Results_new/NN/{name}/DeepNN/"
+    Deep_out_dir = save_dir_base+f"/NN/{name}/DeepNN/"
     os.makedirs(Deep_out_dir, exist_ok=True)
 
     np.save(os.path.join(Deep_out_dir, "cv_balanced_accuracy_val.npy"), bal_acc_val_deep)

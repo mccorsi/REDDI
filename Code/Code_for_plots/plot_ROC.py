@@ -3,14 +3,22 @@ import numpy as np
 from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
+import os
+import sys
 
 ###################################
 # Used to produce figure 6C
 ###################################
 
+json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print( current_dir)
+json_path = os.path.join(current_dir, "..","..",json_path)
+save_dir = os.path.join(current_dir, "..","..","Images")
+print(json_path)
+os.makedirs(save_dir, exist_ok=True)
 
 # Load data
-json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
 with open(json_path, 'r') as f:
     data = json.load(f)
 
@@ -66,5 +74,5 @@ plt.ylabel('True Positive Rate')
 plt.title('ROC Curves for Final Predictions')
 plt.legend(loc='lower right')
 plt.tight_layout()
-plt.savefig('Images/TSClassifier_roc_curves_final_predictions.png')
+plt.savefig(save_dir+"TSClassifier_roc_curves_final_predictions.png")
 plt.show()

@@ -3,7 +3,14 @@ from xgboost import XGBClassifier
 import os
 import sys
 
-sys.path.append(os.path.abspath("Code/_libs"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print( current_dir)
+libs_path = os.path.join(current_dir, "..","..","_libs")
+print(libs_path)
+sys.path.append(libs_path)
+
+save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
+os.makedirs(save_dir_base, exist_ok=True)
 
 from ensemble import EnsembleClassifier
 from utils import load_psds
@@ -30,13 +37,13 @@ print("Dimension of PSD vector: ", X_psd.shape)
 ensemble.fit(X_psd, X_psd, y_psd, cv) 
 
 # Plot and save Results_new
-ensemble.plot_validation_metrics(output_path=f"Results_new/figures/PSD/{model_psd_1.__class__.__name__}/")
+ensemble.plot_validation_metrics(output_path=save_dir_base+f"/figures/PSD/{model_psd_1.__class__.__name__}/")
 
-ensemble.plot_oof_confusion_matrices(y_psd, output_path=f"Results_new/figures/PSD/{model_psd_1.__class__.__name__}/")
+ensemble.plot_oof_confusion_matrices(y_psd, output_path=save_dir_base+f"/figures/PSD/{model_psd_1.__class__.__name__}/")
 
-ensemble.save_metrics(output_path=f"Results_new/logs/PSD/{model_psd_1.__class__.__name__}/")
+ensemble.save_metrics(output_path=save_dir_base+f"/logs/PSD/{model_psd_1.__class__.__name__}/")
 
-ensemble.store_oof_probabilities(output_path=f"Results_new/logs/PSD/{model_psd_1.__class__.__name__}/")
+ensemble.store_oof_probabilities(output_path=save_dir_base+f"/logs/PSD/{model_psd_1.__class__.__name__}/")
 
 cv_scores = ensemble.get_cv_scores()
 print(f"Cross-validation scores: {cv_scores}")
