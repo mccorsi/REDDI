@@ -12,7 +12,7 @@ Mario Roca, Giovanni Messuti, Dmytro Klepachevskyi, Marianna Angiolelli, Simona 
 ---
 ## Authors:
 * Mario Roca, Master student, NERV team-project, Inria Paris, Paris Brain Institute
-* Giovanni Messuti, PhD student, NERV team-project, Inria Paris, Paris Brain Institute & University of Salerno, Department of Physics “E.R. Caianiello”, Fisciano, Italy
+* [Giovanni Messuti](https://scholar.google.com/citations?user=gk0yIcgAAAAJ&hl=it&oi=ao), PhD student, NERV team-project, Inria Paris, Paris Brain Institute & University of Salerno, Department of Physics “E.R. Caianiello”, Fisciano, Italy
 * Dmytro Klepachevskyi, Master student, Neuroscience Institute, Lithuanian University of Health Sciences, Kaunas, Lithuania
 * Marianna Angiolelli, Postdoctoral researcher, Institut de Neurosciences des Systèmes, Aix-Marseille Université, Marseille, France & Università degli Studi di Napoli Parthenope, Dipartimento delle Scienze Mediche, Motorie e
 del Benessere, Napoli, Italy
@@ -59,7 +59,7 @@ Each subfolder corresponds to a different classifier implementation:
 - Riemannian models  
 - Neural Networks (NN)
 
-Running these scripts generates new results, which are saved in a **newly created subfolder** inside `Results/` so that the original reference outputs are not overwritten.
+Running these scripts generates new results, which are saved in a **newly created subfolder** called `Results_new/` so that the original reference outputs are not overwritten.
 
 ### **• _libs/**
 Contains internal modules (utility functions, helper classes, and shared components) used throughout the project.  
@@ -70,7 +70,7 @@ These files define reusable functionality imported by both the training and plot
 ## Results
 
 This folder contains the outputs of the model training procedures.  
-When running scripts from `Code/Train_models/`, new results are saved in a **new subdirectory** inside `Results/` rather than overwriting the existing ones.
+When running scripts from `Code/Train_models/`, new results are saved in a **new subdirectory** (`Results_new/`) rather than overwriting the existing ones.
 
 ---
 
