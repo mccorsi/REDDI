@@ -40,7 +40,7 @@ To install all required Python packages, run:
 
 `pip install -r requirements.txt`
 
-\textbf{Please note:}
+### Please note:
 - The environment has been tested with **Python 3.11.9**.
 - all paths are set to work with the repository’s default directory structure. Modifying the location of files or folders after cloning will require adjusting the paths inside the scripts.
   
