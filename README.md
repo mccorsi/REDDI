@@ -35,13 +35,15 @@ Neurodegenerative diseases such as Mild Cognitive Impairment (MCI), Multiple Scl
 ---
 ## Code
 
-This folder contains all the scripts used to run the analyses and to generate the figures presented in the project.
-
+This folder contains all the scripts used to run the analyses and to generate the figures presented in the project. 
 To install all required Python packages, run:
 
 `pip install -r requirements.txt`
 
-The environment has been tested with **Python 3.11.9**.
+\textbf{Please note:}
+- The environment has been tested with **Python 3.11.9**.
+- all paths are set to work with the repository’s default directory structure. Modifying the location of files or folders after cloning will require adjusting the paths inside the scripts.
+  
 
 The `Code` directory includes three subfolders:
 
