@@ -8,13 +8,15 @@ from tensorflow.keras.optimizers import Adam
 warnings.filterwarnings("ignore")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 libs_path = os.path.join(current_dir, "..","..","_libs")
-print(libs_path)
+#print(libs_path)
 sys.path.append(libs_path)
 
 save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
 os.makedirs(save_dir_base, exist_ok=True)
+
+data_path = os.path.join(current_dir, "..","..","..","data","features")
 
 from utils import load_cov_mats, load_corr_mats, load_atms, upper_triangular_flatten
 from select_features import FC_DimRed
@@ -81,9 +83,9 @@ def prepare_features(X, y, nb_nodes, label):
 # Load and encode datasets
 # ===============================================================
 print("\n===== Loading datasets =====")
-X_cov, y_cov = load_cov_mats()
-X_corr, y_corr = load_corr_mats()
-X_atm,  y_atm  = load_atms()
+X_cov, y_cov = load_cov_mats(data_path)
+X_corr, y_corr = load_corr_mats(data_path)
+X_atm,  y_atm  = load_atms(data_path)
 
 # Ensure all have same subjects and labels
 assert np.all(y_cov == y_corr) and np.all(y_cov == y_atm), "Label mismatch between datasets!"

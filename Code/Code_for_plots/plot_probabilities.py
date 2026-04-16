@@ -10,7 +10,7 @@ import sys
 
 json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 json_path = os.path.join(current_dir, "..","..",json_path)
 save_dir = os.path.join(current_dir, "..","..","Images")
 os.makedirs(save_dir, exist_ok=True)

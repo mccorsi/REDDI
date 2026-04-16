@@ -5,13 +5,15 @@ import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 libs_path = os.path.join(current_dir, "..","..","_libs")
-print(libs_path)
+#print(libs_path)
 sys.path.append(libs_path)
 
 save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
 os.makedirs(save_dir_base, exist_ok=True)
+
+data_path = os.path.join(current_dir, "..","..","..","data","features")
 
 from ensemble import EnsembleClassifier
 from utils import load_cov_mats, load_corr_mats
@@ -23,8 +25,8 @@ import json
 warnings.filterwarnings('ignore')
 
 # Load the data
-X_cov_mat, y_cov_mat = load_cov_mats()
-X_corr_mat, y_corr_mat = load_corr_mats()
+X_cov_mat, y_cov_mat = load_cov_mats(data_path)
+X_corr_mat, y_corr_mat = load_corr_mats(data_path)
 
 # Select only the first 78x78 features
 X_cov_mat = X_cov_mat[:, :78, :78]

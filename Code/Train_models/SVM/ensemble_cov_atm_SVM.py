@@ -4,13 +4,15 @@ import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 libs_path = os.path.join(current_dir, "..","..","_libs")
-print(libs_path)
+#print(libs_path)
 sys.path.append(libs_path)
 
 save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
 os.makedirs(save_dir_base, exist_ok=True)
+
+data_path = os.path.join(current_dir, "..","..","..","data","features")
 
 from ensemble import EnsembleClassifier
 from utils import load_cov_mats, load_atms, upper_triangular_flatten
@@ -21,8 +23,8 @@ import numpy as np
 warnings.filterwarnings('ignore')
 
 # Load the data
-X_cov_mat, y_cov_mat = load_cov_mats()
-X_atm, y_atm = load_atms(zscore=1.6)
+X_cov_mat, y_cov_mat = load_cov_mats(data_path)
+X_atm, y_atm = load_atms(data_path, zscore=1.6)
 
 # Select only the first 78x78 features
 X_cov_mat = X_cov_mat[:, :78, :78]

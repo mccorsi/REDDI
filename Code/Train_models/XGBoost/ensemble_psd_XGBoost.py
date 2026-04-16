@@ -4,13 +4,15 @@ import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 libs_path = os.path.join(current_dir, "..","..","_libs")
-print(libs_path)
+#print(libs_path)
 sys.path.append(libs_path)
 
 save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
 os.makedirs(save_dir_base, exist_ok=True)
+
+data_path = os.path.join(current_dir, "..","..","..","data","features")
 
 from ensemble import EnsembleClassifier
 from utils import load_psds
@@ -21,7 +23,7 @@ import numpy as np
 warnings.filterwarnings('ignore')
 
 # Load the data
-X_psd, y_psd = load_psds()
+X_psd, y_psd = load_psds(data_path)
 
 # Models definition
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)

@@ -11,13 +11,15 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.optimizers import Adam
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-print( current_dir)
+#print( current_dir)
 libs_path = os.path.join(current_dir, "..","..","_libs")
-print(libs_path)
+#print(libs_path)
 sys.path.append(libs_path)
 
 save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
 os.makedirs(save_dir_base, exist_ok=True)
+
+data_path = os.path.join(current_dir, "..","..","..","data","features") 
 
 
 from select_features import FC_DimRed
@@ -66,10 +68,10 @@ def build_deep_nn(input_dim, num_classes):
 # Load all datasets
 # ------------------------------------------------------------------
 datasets = {
-    "Covariance": load_cov_mats(),
-    "Correlation": load_corr_mats(),
-    "ATM": load_atms(),
-    "PSDs": load_psds(),
+    "Covariance": load_cov_mats(data_path),
+    "Correlation": load_corr_mats(data_path),
+    "ATM": load_atms(data_path),
+    "PSDs": load_psds(data_path),
 }
 
 # Feature selection setup
