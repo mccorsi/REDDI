@@ -67,5 +67,6 @@ for num_nodes in [20,35,50]:
     print(f"Cross-validation scores: {cv_scores}")
 
     # Test predict function
-    predictions = ensemble.predict(X_cov_mat, X_atm)
-    print("Predictions: ", predictions)
+    # TODO change here
+    # predictions = ensemble.predict(X_cov_mat, X_atm)
+    # print("Predictions: ", predictions)
