@@ -14,7 +14,7 @@ os.makedirs(save_dir_base, exist_ok=True)
 
 data_path = os.path.join(current_dir, "..","..","..","data","features")
 
-from ensemble import EnsembleClassifier
+from _new_ensemble_features_cv_selected import EnsembleClassifier
 from utils import load_psds
 
 import warnings

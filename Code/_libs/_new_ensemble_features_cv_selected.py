@@ -33,7 +33,7 @@ class EnsembleClassifier:
         self.train_metrics_1 = [] 
         self.train_metrics_2 = [] 
 
-    def fit(self, X_1, X_2, y, cv, num_nodes_feat_selection=None, threshold_feat_selection=None):
+    def fit(self, X_1, X_2, y, cv, num_nodes_feat_selection=None, threshold_feat_selection=None, riemanian_classifier=False):
         self.models_1 = []
         self.models_2 = []
 
@@ -67,15 +67,16 @@ class EnsembleClassifier:
                 X_2_val = dim_red_eta_2.transform(X_2_val)
                 print(f"Selected nodes Second Matrices: {dim_red_eta_2.node_select_}")
 
-
-                print("Dimension of First Matrices before flattening: ", X_1_train.shape)
-                print("Dimension of Second Matrices before flattening: ", X_2_train.shape)
-                X_1_train = np.array([upper_triangular_flatten(mat) for mat in X_1_train])
-                X_2_train = np.array([upper_triangular_flatten(mat) for mat in X_2_train])
-                X_1_val = np.array([upper_triangular_flatten(mat) for mat in X_1_val])
-                X_2_val = np.array([upper_triangular_flatten(mat) for mat in X_2_val])
-                print("Dimension of First Matrices after flattening: ", X_1_val.shape)
-                print("Dimension of Second Matrices after flattening: ", X_2_val.shape)
+                if riemanian_classifier == False:
+                    # Flatten the matrices after dimensionality reduction
+                    print("Dimension of First Matrices before flattening: ", X_1_train.shape)
+                    print("Dimension of Second Matrices before flattening: ", X_2_train.shape)
+                    X_1_train = np.array([upper_triangular_flatten(mat) for mat in X_1_train])
+                    X_2_train = np.array([upper_triangular_flatten(mat) for mat in X_2_train])
+                    X_1_val = np.array([upper_triangular_flatten(mat) for mat in X_1_val])
+                    X_2_val = np.array([upper_triangular_flatten(mat) for mat in X_2_val])
+                    print("Dimension of First Matrices after flattening: ", X_1_train.shape)
+                    print("Dimension of Second Matrices after flattening: ", X_2_train.shape)
 
             # Train each model on their respective feature sets
             model1 = self.model1

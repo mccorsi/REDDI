@@ -1,5 +1,5 @@
 
 
 vedi file 
-New_train_model / ensemble_cov_corr_LDA.py
+New_train_model / SVM / ensemble_cov_corr_SVM.py
 

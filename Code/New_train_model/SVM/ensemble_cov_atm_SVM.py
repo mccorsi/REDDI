@@ -9,12 +9,10 @@ libs_path = os.path.join(current_dir, "..","..","_libs")
 #print(libs_path)
 sys.path.append(libs_path)
 
-save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
-os.makedirs(save_dir_base, exist_ok=True)
 
 data_path = os.path.join(current_dir, "..","..","..","data","features")
 
-from ensemble import EnsembleClassifier
+from _new_ensemble_features_cv_selected import EnsembleClassifier
 from utils import load_cov_mats, load_atms, upper_triangular_flatten
 from select_features import FC_DimRed
 
@@ -22,52 +20,57 @@ import warnings
 import numpy as np
 warnings.filterwarnings('ignore')
 
-# Load the data
-X_cov_mat, y_cov_mat = load_cov_mats(data_path)
-X_atm, y_atm = load_atms(data_path, zscore=1.6)
+for num_nodes in [20,35,50]:
 
-# Select only the first 78x78 features
-X_cov_mat = X_cov_mat[:, :78, :78]
-X_atm = X_atm[:, :78, :78]  
+    save_dir_base = os.path.join(current_dir, "..","..","..","Results_new", f"num_nodes_{num_nodes}")
+    os.makedirs(save_dir_base, exist_ok=True)
 
-# Dimensionality reduction
-dim_red_eta_50 = FC_DimRed(eta_threshold=0.1, nb_nodes=50)
-X_cov_mat = dim_red_eta_50.fit_transform(X_cov_mat, y_cov_mat, metric='eta-squared')
-print(f"Selected nodes Covariance Matrices: {dim_red_eta_50.node_select_}")
+    # Load the data
+    X_cov_mat, y_cov_mat = load_cov_mats(data_path)
+    X_atm, y_atm = load_atms(data_path, zscore=1.6)
 
-dim_red_eta_20 = FC_DimRed(eta_threshold=0.1, nb_nodes=20)
-X_atm = dim_red_eta_20.fit_transform(X_atm, y_atm, metric='eta-squared')
-print(f"Selected nodes ATMs: {dim_red_eta_20.node_select_}")
+    # Select only the first 78x78 features
+    X_cov_mat = X_cov_mat[:, :78, :78]
+    X_atm = X_atm[:, :78, :78]  
 
-# Models definition
-cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    # Dimensionality reduction
+    # dim_red_eta_50 = FC_DimRed(eta_threshold=0.1, nb_nodes=50)
+    # X_cov_mat = dim_red_eta_50.fit_transform(X_cov_mat, y_cov_mat, metric='eta-squared')
+    # print(f"Selected nodes Covariance Matrices: {dim_red_eta_50.node_select_}")
 
-model_cov_mat = SVC(kernel='rbf', probability=True, random_state=42)
-model_atm = SVC(kernel='rbf', probability=True, random_state=42)
+    # dim_red_eta_20 = FC_DimRed(eta_threshold=0.1, nb_nodes=20)
+    # X_atm = dim_red_eta_20.fit_transform(X_atm, y_atm, metric='eta-squared')
+    # print(f"Selected nodes ATMs: {dim_red_eta_20.node_select_}")
 
-ensemble = EnsembleClassifier(model_cov_mat, model_atm)
+    # Models definition
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-print("Dimension of Covariance Matrices before flattening: ", X_cov_mat.shape)
-print("Dimension of ATMs before flattening: ", X_atm.shape)
-X_cov_mat = np.array([upper_triangular_flatten(mat) for mat in X_cov_mat])
-X_atm = np.array([upper_triangular_flatten(mat) for mat in X_atm])
-print("Dimension of Covariance Matrices after flattening: ", X_cov_mat.shape)
-print("Dimension of ATMs after flattening: ", X_atm.shape)
+    model_cov_mat = SVC(kernel='rbf', probability=True, random_state=42)
+    model_atm = SVC(kernel='rbf', probability=True, random_state=42)
 
-# Fit the ensemble model
-ensemble.fit(X_cov_mat, X_atm, y_cov_mat, cv) 
+    ensemble = EnsembleClassifier(model_cov_mat, model_atm)
 
-# Plot and save Results_new
-ensemble.plot_validation_metrics(output_path=save_dir_base+f"/figures/{model_cov_mat.__class__.__name__}/")
-ensemble.plot_oof_confusion_matrices(y_cov_mat, output_path=save_dir_base+f"/figures/{model_cov_mat.__class__.__name__}/")
+    # print("Dimension of Covariance Matrices before flattening: ", X_cov_mat.shape)
+    # print("Dimension of ATMs before flattening: ", X_atm.shape)
+    # X_cov_mat = np.array([upper_triangular_flatten(mat) for mat in X_cov_mat])
+    # X_atm = np.array([upper_triangular_flatten(mat) for mat in X_atm])
+    # print("Dimension of Covariance Matrices after flattening: ", X_cov_mat.shape)
+    # print("Dimension of ATMs after flattening: ", X_atm.shape)
 
-ensemble.save_metrics(output_path=save_dir_base+f"/logs/{model_cov_mat.__class__.__name__}/")
+    # Fit the ensemble model
+    ensemble.fit(X_cov_mat, X_atm, y_cov_mat, cv, threshold_feat_selection=0.1, num_nodes_feat_selection=num_nodes)  
 
-ensemble.store_oof_probabilities(output_path=save_dir_base+f"/logs/{model_cov_mat.__class__.__name__}/")
+    # Plot and save Results_new
+    ensemble.plot_validation_metrics(output_path=save_dir_base+f"/figures/{model_cov_mat.__class__.__name__}/")
+    ensemble.plot_oof_confusion_matrices(y_cov_mat, output_path=save_dir_base+f"/figures/{model_cov_mat.__class__.__name__}/")
 
-cv_scores = ensemble.get_cv_scores()
-print(f"Cross-validation scores: {cv_scores}")
+    ensemble.save_metrics(output_path=save_dir_base+f"/logs/{model_cov_mat.__class__.__name__}/")
 
-# Test predict function
-predictions = ensemble.predict(X_cov_mat, X_atm)
-print("Predictions: ", predictions)
+    ensemble.store_oof_probabilities(output_path=save_dir_base+f"/logs/{model_cov_mat.__class__.__name__}/")
+
+    cv_scores = ensemble.get_cv_scores()
+    print(f"Cross-validation scores: {cv_scores}")
+
+    # Test predict function
+    # predictions = ensemble.predict(X_cov_mat, X_atm)
+    # print("Predictions: ", predictions)
