@@ -34,19 +34,6 @@ for num_nodes in [20,35,50]:
     X_corr_mat = X_corr_mat[:, :78, :78]  
     X_atm_mat = X_atm[:, :78, :78]
 
-    # Dimensionality reduction
-    # dim_red_eta_20 = FC_DimRed(eta_threshold=0.1, nb_nodes=20)
-    # # dim_red_eta_20 = AverageFilter(eta_threshold=0.1, nb_nodes=20)
-    # X_corr_mat = dim_red_eta_20.fit_transform(X_corr_mat, y_corr_mat, metric='eta-squared')
-    # print(f"Selected nodes Correlation Matrices: {dim_red_eta_20.node_select_}")
-
-
-    # dim_red_eta_20 = FC_DimRed(eta_threshold=0.1, nb_nodes=20)
-    # # dim_red_eta_20 = AverageFilter(eta_threshold=0.1, nb_nodes=20)
-    # X_atm = dim_red_eta_20.fit_transform(X_atm, y_atm, metric='eta-squared')
-    # print(f"Selected nodes ATMs: {dim_red_eta_20.node_select_}")
-
-
     # Models definition
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
