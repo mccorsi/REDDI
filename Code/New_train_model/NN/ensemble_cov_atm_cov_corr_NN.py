@@ -1,28 +1,26 @@
-import os, sys, numpy as np, warnings
-from sklearn.model_selection import StratifiedKFold, cross_validate
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from scikeras.wrappers import KerasClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.optimizers import Adam
-warnings.filterwarnings("ignore")
+import os
+import sys
+import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 #print( current_dir)
-libs_path = os.path.join(current_dir, "..","..","_libs")
+libs_path = os.path.join(current_dir, "..", "..", "_libs")
 #print(libs_path)
 sys.path.append(libs_path)
 
-save_dir_base = os.path.join(current_dir, "..","..","..","Results_new")
-os.makedirs(save_dir_base, exist_ok=True)
+from _new_ensemble_features_cv_selected import EnsembleClassifier
+from utils import load_cov_mats, load_atms, load_corr_mats
 
-data_path = os.path.join(current_dir, "..","..","..","data","features")
-
-from utils import load_cov_mats, load_corr_mats, load_atms, upper_triangular_flatten
-from select_features import FC_DimRed
 
 # ===============================================================
-# Neural network architectures
+# Neural network architectures (identiche agli altri script NN)
 # ===============================================================
 def build_simple_nn(input_dim, num_classes):
     model = Sequential([
@@ -58,150 +56,111 @@ def build_deep_nn(input_dim, num_classes):
 
 
 # ===============================================================
-# Helper for feature processing
+# Adapter: rende un modello Keras utilizzabile come model1 / model2
+# dentro EnsembleClassifier, che chiama .fit(X, y) e .predict_proba(X).
+#
+# EnsembleClassifier.fit() riusa gli stessi oggetti model1/model2 per
+# tutti i fold della CV (model1.fit(...) viene chiamato una volta per
+# fold sulla *stessa* istanza). Per un modello sklearn (es. LDA) va bene,
+# perché .fit() reinizializza sempre i parametri interni. Per una rete
+# neurale i pesi persisterebbero da un fold all'altro, quindi questo
+# wrapper ricostruisce la rete da zero (build_fn) ad ogni chiamata di
+# .fit() -- così riusare la stessa istanza tra i fold è sicuro.
 # ===============================================================
-def prepare_features(X, y, nb_nodes, label):
-    if X.ndim == 3 and X.shape[1] >= 78:
-        X = X[:, :78, :78]
-    if nb_nodes is not None:
-        dim_red = FC_DimRed(eta_threshold=0.1, nb_nodes=nb_nodes)
-        X = dim_red.fit_transform(X, y, metric="eta-squared")
-        print(f"{label}: selected {len(dim_red.node_select_)} nodes")
+class KerasEnsembleModel:
+    build_fn = None    # impostata dalla sottoclasse
+    epochs = 50        # impostata dalla sottoclasse
+    batch_size = 16
+    verbose = 0
 
-    # Flatten
-    X = np.array([upper_triangular_flatten(m) for m in X])
-    print(f"{label}: flattened shape {X.shape}")
+    def __init__(self):
+        self.model_ = None
 
-    # Normalize to zero mean / unit variance
-    scaler = StandardScaler()
-    X = scaler.fit_transform(X)
-    print(f"{label}: scaled mean {X.mean():.4f}, std {X.std():.4f}")
-    return X
+    def fit(self, X, y):
+        num_classes = len(np.unique(y))
+        self.model_ = self.build_fn(X.shape[1], num_classes)
+        self.model_.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, verbose=self.verbose)
+        return self
+
+    def predict_proba(self, X):
+        return self.model_.predict(X, verbose=self.verbose)
 
 
-# ===============================================================
-# Load and encode datasets
-# ===============================================================
-print("\n===== Loading datasets =====")
-X_cov, y_cov = load_cov_mats(data_path)
-X_corr, y_corr = load_corr_mats(data_path)
-X_atm,  y_atm  = load_atms(data_path)
+class SimpleNN(KerasEnsembleModel):
+    build_fn = staticmethod(build_simple_nn)
+    epochs = 50
 
-# Ensure all have same subjects and labels
-assert np.all(y_cov == y_corr) and np.all(y_cov == y_atm), "Label mismatch between datasets!"
 
-# Encode labels to integers for Keras
-le = LabelEncoder()
-y_cov = le.fit_transform(y_cov)
-y_corr = le.transform(y_corr)
-y_atm  = le.transform(y_atm)
-y = y_cov  # unified labels
+class DeepNN(KerasEnsembleModel):
+    build_fn = staticmethod(build_deep_nn)
+    epochs = 80
 
-# ===============================================================
-# Feature selection
-# ===============================================================
-print("\n===== Applying feature selection =====")
-X_cov  = prepare_features(X_cov,  y, nb_nodes=50, label="Covariance")
-X_corr = prepare_features(X_corr, y, nb_nodes=20, label="Correlation")
-X_atm  = prepare_features(X_atm,  y, nb_nodes=20, label="ATM")
 
-# ===============================================================
-# Build ensembles (feature concatenation)
-# ===============================================================
-
-X_cov_atm  = np.concatenate([X_cov,  X_atm],  axis=1)
-X_cov_corr = np.concatenate([X_cov, X_corr], axis=1)
-
-datasets = {
-    "COV+ATM":  X_cov_atm,
-    "COV+CORR": X_cov_corr
+NN_ARCHITECTURES = {
+    "SimpleNN": SimpleNN,
+    "DeepNN": DeepNN,
 }
 
+
 # ===============================================================
-# Training setup
+# Caricamento dati una sola volta (non dipende da num_nodes,
+# non serve ricaricarlo ad ogni iterazione del ciclo)
 # ===============================================================
+data_path = os.path.join(current_dir, "..", "..", "..", "data", "features")
+
+X_cov_mat, y_cov_mat = load_cov_mats(data_path)
+X_atm, y_atm = load_atms(data_path, zscore=1.6)
+X_corr, y_corr = load_corr_mats(data_path)
+assert np.array_equal(y_cov_mat, y_atm), "Target labels for covariance matrices and ATMs do not match."
+assert np.array_equal(y_cov_mat, y_corr), "Target labels for covariance matrices and correlation matrices do not match."
+
+# Select only the first 78x78 features
+X_cov_mat = X_cov_mat[:, :78, :78]
+X_atm = X_atm[:, :78, :78]
+X_corr = X_corr[:, :78, :78]
+
+# Keras richiede label intere per sparse_categorical_crossentropy
+# (no-op se y_cov_mat e' gia' intera)
+le = LabelEncoder()
+y_cov_mat = le.fit_transform(y_cov_mat)
+
+ensemble_pairs = {
+    "COV+ATM":  dict(X_1=X_cov_mat, X_2=X_atm,  feature_names=['covariance_matrices', 'atms']),
+    "COV+CORR": dict(X_1=X_cov_mat, X_2=X_corr, feature_names=['covariance_matrices', 'correlation_matrices']),
+}
+
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-num_classes = len(np.unique(y))
 
 # ===============================================================
-# Train Simple NN & Deep NN on each ensemble dataset
-# ===============================================================
-for name, X in datasets.items():
-    print(f"\n===== Ensemble dataset: {name} =====")
-    print("Input shape:", X.shape)
+# TODO change here
+for num_nodes in [20, 35, 50]:
 
-    # ---------- Simple NN ----------
-    print(f"\nTraining Simple NN on {name}...")
-    simple_nn = KerasClassifier(
-        model=lambda: build_simple_nn(X.shape[1], num_classes),
-        epochs=50,
-        batch_size=16,
-        verbose=0
-    )
+    save_dir_base = os.path.join(current_dir, "..", "..", "..", "Results_new", f"num_nodes_{num_nodes}")
+    os.makedirs(save_dir_base, exist_ok=True)
 
-    scores_simple = cross_validate(simple_nn, X, y, cv=cv, 
-                                   scoring={"bal_acc": "balanced_accuracy","f1": "f1_macro" }, 
-                                   return_train_score=True)
+    for pair_name, pair_cfg in ensemble_pairs.items():
+        for arch_name, ArchClass in NN_ARCHITECTURES.items():
 
-    # Balanced accuracy
-    bal_acc_train_simple = scores_simple["train_bal_acc"]
-    bal_acc_val_simple   = scores_simple["test_bal_acc"]
+            print(f"\n===== num_nodes={num_nodes} | {pair_name} | {arch_name} =====")
 
-    # F1
-    f1_train_simple = scores_simple["train_f1"]
-    f1_val_simple   = scores_simple["test_f1"]
+            # Due istanze SEPARATE: EnsembleClassifier tiene model1/model2
+            # per tutta la CV, quindi non devono essere lo stesso oggetto
+            # (altrimenti il secondo .fit() sovrascriverebbe i pesi del primo).
+            model_1 = ArchClass()
+            model_2 = ArchClass()
 
-    print(f"{name} Simple NN CV Balanced Acc validation: {bal_acc_val_simple.mean():.4f} ± {bal_acc_val_simple.std():.4f}")
-    print(f"{name} Simple NN CV Balanced Acc training: {bal_acc_train_simple.mean():.4f} ± {bal_acc_train_simple.std():.4f}")
-    print(f"{name} Simple NN CV F1 validation: {f1_val_simple.mean():.4f} ± {f1_val_simple.std():.4f}")
-    print(f"{name} Simple NN CV F1 training: {f1_train_simple.mean():.4f} ± {f1_train_simple.std():.4f}")
+            ensemble = EnsembleClassifier(model_1, model_2, feature_names=pair_cfg["feature_names"])
 
-    # Save
-    Simple_out_dir = save_dir_base+f"/NN/{name}/SimpleNN/"
-    os.makedirs(Simple_out_dir, exist_ok=True)
+            ensemble.fit(
+                pair_cfg["X_1"], pair_cfg["X_2"], y_cov_mat, cv,
+                threshold_feat_selection=0.1, num_nodes_feat_selection=num_nodes
+            )
 
-    np.save(os.path.join(Simple_out_dir, "cv_balanced_accuracy_val.npy"), bal_acc_val_simple)
-    np.save(os.path.join(Simple_out_dir, "cv_balanced_accuracy_train.npy"), bal_acc_train_simple)
-    np.save(os.path.join(Simple_out_dir, "cv_f1_val.npy"), f1_val_simple)
-    np.save(os.path.join(Simple_out_dir, "cv_f1_train.npy"), f1_train_simple)
+            out_tag = f"{pair_name}/{arch_name}"
+            ensemble.plot_validation_metrics(output_path=save_dir_base + f"/figures/{out_tag}/")
+            ensemble.plot_oof_confusion_matrices(y_cov_mat, output_path=save_dir_base + f"/figures/{out_tag}/")
+            ensemble.save_metrics(output_path=save_dir_base + f"/logs/{out_tag}/")
+            ensemble.store_oof_probabilities(output_path=save_dir_base + f"/logs/{out_tag}/")
 
-
-
-    # ---------- Deep NN ----------
-    print(f"\nTraining Deep NN on {name}...")
-    deep_nn = KerasClassifier(
-        model=lambda: build_deep_nn(X.shape[1], num_classes),
-        epochs=80,
-        batch_size=16,
-        verbose=0
-    )
-
-    
-    scores_deep = cross_validate(deep_nn, X, y, cv=cv, 
-                                   scoring={"bal_acc": "balanced_accuracy","f1": "f1_macro" }, 
-                                   return_train_score=True)
-    # Balanced accuracy
-    bal_acc_train_deep = scores_deep["train_bal_acc"]
-    bal_acc_val_deep   = scores_deep["test_bal_acc"]
-
-    # F1
-    f1_train_deep = scores_deep["train_f1"]
-    f1_val_deep   = scores_deep["test_f1"]
-
-    print(f"{name} Simple NN CV Balanced Acc validation: {bal_acc_val_deep.mean():.4f} ± {bal_acc_val_deep.std():.4f}")
-    print(f"{name} Simple NN CV Balanced Acc training: {bal_acc_train_deep.mean():.4f} ± {bal_acc_train_deep.std():.4f}")
-    print(f"{name} Simple NN CV F1 validation: {f1_val_deep.mean():.4f} ± {f1_val_deep.std():.4f}")
-    print(f"{name} Simple NN CV F1 training: {f1_train_deep.mean():.4f} ± {f1_train_deep.std():.4f}")
-
-    # Save
-    Deep_out_dir = save_dir_base+f"/NN/{name}/DeepNN/"
-    os.makedirs(Deep_out_dir, exist_ok=True)
-
-    np.save(os.path.join(Deep_out_dir, "cv_balanced_accuracy_val.npy"), bal_acc_val_deep)
-    np.save(os.path.join(Deep_out_dir, "cv_balanced_accuracy_train.npy"), bal_acc_train_deep)
-    np.save(os.path.join(Deep_out_dir, "cv_f1_val.npy"), f1_val_deep)
-    np.save(os.path.join(Deep_out_dir, "cv_f1_train.npy"), f1_train_deep)
-
-
-
-    print(f"\nFinished {name}: Results saved in Results_new/NN/{name}/")
+            cv_scores = ensemble.get_cv_scores()
+            print(f"[{num_nodes} | {pair_name} | {arch_name}] Cross-validation scores: {cv_scores}")

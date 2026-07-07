@@ -1,3 +1,9 @@
+1. Obiettivo features selection internamente ai loop Cv
+- ho creato la nuova classe EnsembleClassifier nel file "_new_ensemble_features_cv_selected". Questa fa la selezione delle features nello split
+- Trovo problemi per il codice di Dima, quello su fusione (non usa class ensemble, ma fa concatenazione!). vedo come adattare le cose
+
+2. Avevamo punto del revisore: Giustificare numero di features selezionate 20 o 50. Analizzo 20,35,50 e vedo che succede (ora nell'Ensamble egual numero).
+
 
 
 vedi file 
