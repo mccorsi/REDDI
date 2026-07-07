@@ -1,0 +1,164 @@
+{
+    "validation_metrics_ensemble": [
+        {
+            "accuracy": 0.4090909090909091,
+            "balanced_accuracy": 0.45089285714285715,
+            "f1_macro": 0.38125
+        },
+        {
+            "accuracy": 0.36363636363636365,
+            "balanced_accuracy": 0.3958333333333333,
+            "f1_macro": 0.33658008658008653
+        },
+        {
+            "accuracy": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "f1_macro": 0.4707341269841269
+        },
+        {
+            "accuracy": 0.2727272727272727,
+            "balanced_accuracy": 0.3229166666666667,
+            "f1_macro": 0.2222222222222222
+        },
+        {
+            "accuracy": 0.2857142857142857,
+            "balanced_accuracy": 0.4107142857142857,
+            "f1_macro": 0.24656593406593408
+        }
+    ],
+    "validation_metrics_covariance_matrices": [
+        {
+            "accuracy": 0.4090909090909091,
+            "balanced_accuracy": 0.45089285714285715,
+            "f1_macro": 0.38125
+        },
+        {
+            "accuracy": 0.36363636363636365,
+            "balanced_accuracy": 0.3958333333333333,
+            "f1_macro": 0.33658008658008653
+        },
+        {
+            "accuracy": 0.45454545454545453,
+            "balanced_accuracy": 0.5,
+            "f1_macro": 0.4707341269841269
+        },
+        {
+            "accuracy": 0.2727272727272727,
+            "balanced_accuracy": 0.3229166666666667,
+            "f1_macro": 0.2222222222222222
+        },
+        {
+            "accuracy": 0.2857142857142857,
+            "balanced_accuracy": 0.4107142857142857,
+            "f1_macro": 0.24656593406593408
+        }
+    ],
+    "validation_metrics_atms": [
+        {
+            "accuracy": 0.5454545454545454,
+            "balanced_accuracy": 0.5491071428571428,
+            "f1_macro": 0.47619047619047616
+        },
+        {
+            "accuracy": 0.6818181818181818,
+            "balanced_accuracy": 0.6666666666666666,
+            "f1_macro": 0.6595238095238096
+        },
+        {
+            "accuracy": 0.6818181818181818,
+            "balanced_accuracy": 0.6354166666666666,
+            "f1_macro": 0.6361111111111111
+        },
+        {
+            "accuracy": 0.36363636363636365,
+            "balanced_accuracy": 0.35416666666666663,
+            "f1_macro": 0.3726190476190476
+        },
+        {
+            "accuracy": 0.5714285714285714,
+            "balanced_accuracy": 0.47619047619047616,
+            "f1_macro": 0.4476911976911977
+        }
+    ],
+    "train_metrics_ensemble": [
+        {
+            "accuracy": 0.9770114942528736,
+            "balanced_accuracy": 0.974375,
+            "f1_macro": 0.9712084430546413
+        },
+        {
+            "accuracy": 0.9540229885057471,
+            "balanced_accuracy": 0.9488379563984403,
+            "f1_macro": 0.9448884052665121
+        },
+        {
+            "accuracy": 0.9885057471264368,
+            "balanced_accuracy": 0.984375,
+            "f1_macro": 0.9833147942157954
+        },
+        {
+            "accuracy": 0.9770114942528736,
+            "balanced_accuracy": 0.9763104838709677,
+            "f1_macro": 0.9711704565485635
+        },
+        {
+            "accuracy": 0.9659090909090909,
+            "balanced_accuracy": 0.9665625,
+            "f1_macro": 0.9601379163591145
+        }
+    ],
+    "train_metrics_covariance_matrices": [
+        {
+            "accuracy": 0.9770114942528736,
+            "balanced_accuracy": 0.974375,
+            "f1_macro": 0.9712084430546413
+        },
+        {
+            "accuracy": 0.9540229885057471,
+            "balanced_accuracy": 0.9488379563984403,
+            "f1_macro": 0.9448884052665121
+        },
+        {
+            "accuracy": 0.9885057471264368,
+            "balanced_accuracy": 0.984375,
+            "f1_macro": 0.9833147942157954
+        },
+        {
+            "accuracy": 0.9770114942528736,
+            "balanced_accuracy": 0.9763104838709677,
+            "f1_macro": 0.9711704565485635
+        },
+        {
+            "accuracy": 0.9659090909090909,
+            "balanced_accuracy": 0.9665625,
+            "f1_macro": 0.9601379163591145
+        }
+    ],
+    "train_metrics_atms": [
+        {
+            "accuracy": 0.9540229885057471,
+            "balanced_accuracy": 0.9496438172043011,
+            "f1_macro": 0.9489040903246544
+        },
+        {
+            "accuracy": 0.9310344827586207,
+            "balanced_accuracy": 0.9311580556540234,
+            "f1_macro": 0.9265946920407722
+        },
+        {
+            "accuracy": 0.9655172413793104,
+            "balanced_accuracy": 0.9606854838709677,
+            "f1_macro": 0.9613550237631641
+        },
+        {
+            "accuracy": 0.9655172413793104,
+            "balanced_accuracy": 0.9666950992555832,
+            "f1_macro": 0.9615550719331787
+        },
+        {
+            "accuracy": 0.9659090909090909,
+            "balanced_accuracy": 0.964375,
+            "f1_macro": 0.9647186914468021
+        }
+    ]
+}

@@ -9,7 +9,7 @@ import numpy as np
 old_results = "Results_new"
 
 # Folder where the standardized results will be saved
-new_results = "Results_standardized"
+new_results = "Results_new"
 
 os.makedirs(new_results, exist_ok=True)
 

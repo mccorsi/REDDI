@@ -22,7 +22,7 @@ import os
 import json
 warnings.filterwarnings('ignore')
 
-for num_nodes in [20,35,50]:
+for num_nodes in [20,35,50,78]:
 
     save_dir_base = os.path.join(current_dir, "..","..","..","Results_new", f"num_nodes_{num_nodes}")
     os.makedirs(save_dir_base, exist_ok=True)
@@ -53,7 +53,7 @@ for num_nodes in [20,35,50]:
     ensemble = EnsembleClassifier(model_cov_mat, model_corr_mat, feature_names=['covariance_matrices', 'correlation_matrices'])
 
     # Fit the ensemble model
-    ensemble.fit(X_cov_mat, X_corr_mat, y_cov_mat, cv, threshold_feat_selection=0.1, num_nodes_feat_selection=num_nodes, reiemanian_classifier=True)  
+    ensemble.fit(X_cov_mat, X_corr_mat, y_cov_mat, cv, threshold_feat_selection=0.1, num_nodes_feat_selection=num_nodes, riemanian_classifier=True)  
 
     # Plot and save Results_new
     ensemble.plot_validation_metrics(output_path=save_dir_base+f"/figures/Corr_Mat/{model_cov_mat.__class__.__name__}/")

@@ -1,0 +1,164 @@
+{
+    "validation_metrics_ensemble": [
+        {
+            "accuracy": 0.6818181818181818,
+            "balanced_accuracy": 0.5788690476190477,
+            "f1_macro": 0.5767156862745098
+        },
+        {
+            "accuracy": 0.8636363636363636,
+            "balanced_accuracy": 0.84375,
+            "f1_macro": 0.8354166666666667
+        },
+        {
+            "accuracy": 0.5909090909090909,
+            "balanced_accuracy": 0.48958333333333337,
+            "f1_macro": 0.46397243107769426
+        },
+        {
+            "accuracy": 0.5,
+            "balanced_accuracy": 0.4270833333333333,
+            "f1_macro": 0.4310876623376623
+        },
+        {
+            "accuracy": 0.6190476190476191,
+            "balanced_accuracy": 0.5178571428571428,
+            "f1_macro": 0.493734335839599
+        }
+    ],
+    "validation_metrics_covariance_matrices": [
+        {
+            "accuracy": 0.3181818181818182,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.1206896551724138
+        },
+        {
+            "accuracy": 0.2727272727272727,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.10714285714285714
+        },
+        {
+            "accuracy": 0.2727272727272727,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.10714285714285714
+        },
+        {
+            "accuracy": 0.2727272727272727,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.10714285714285714
+        },
+        {
+            "accuracy": 0.3333333333333333,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.125
+        }
+    ],
+    "validation_metrics_atms": [
+        {
+            "accuracy": 0.6818181818181818,
+            "balanced_accuracy": 0.5788690476190477,
+            "f1_macro": 0.5767156862745098
+        },
+        {
+            "accuracy": 0.8636363636363636,
+            "balanced_accuracy": 0.84375,
+            "f1_macro": 0.8354166666666667
+        },
+        {
+            "accuracy": 0.5909090909090909,
+            "balanced_accuracy": 0.48958333333333337,
+            "f1_macro": 0.46397243107769426
+        },
+        {
+            "accuracy": 0.5,
+            "balanced_accuracy": 0.4270833333333333,
+            "f1_macro": 0.4310876623376623
+        },
+        {
+            "accuracy": 0.6190476190476191,
+            "balanced_accuracy": 0.5178571428571428,
+            "f1_macro": 0.493734335839599
+        }
+    ],
+    "train_metrics_ensemble": [
+        {
+            "accuracy": 0.9885057471264368,
+            "balanced_accuracy": 0.9919354838709677,
+            "f1_macro": 0.9909996785599486
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        }
+    ],
+    "train_metrics_covariance_matrices": [
+        {
+            "accuracy": 0.28735632183908044,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.11160714285714286
+        },
+        {
+            "accuracy": 0.2988505747126437,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.11504424778761062
+        },
+        {
+            "accuracy": 0.2988505747126437,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.11504424778761062
+        },
+        {
+            "accuracy": 0.2988505747126437,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.11504424778761062
+        },
+        {
+            "accuracy": 0.2840909090909091,
+            "balanced_accuracy": 0.25,
+            "f1_macro": 0.11061946902654868
+        }
+    ],
+    "train_metrics_atms": [
+        {
+            "accuracy": 0.9885057471264368,
+            "balanced_accuracy": 0.9919354838709677,
+            "f1_macro": 0.9909996785599486
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        },
+        {
+            "accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "f1_macro": 1.0
+        }
+    ]
+}

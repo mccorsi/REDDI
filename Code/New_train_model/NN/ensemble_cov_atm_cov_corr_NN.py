@@ -133,7 +133,7 @@ cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 # ===============================================================
 # TODO change here
-for num_nodes in [20, 35, 50]:
+for num_nodes in [20, 35, 50,78]:
 
     save_dir_base = os.path.join(current_dir, "..", "..", "..", "Results_new", f"num_nodes_{num_nodes}")
     os.makedirs(save_dir_base, exist_ok=True)
