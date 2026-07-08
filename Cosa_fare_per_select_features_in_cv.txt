@@ -6,6 +6,8 @@
 
 
 
-vedi file 
-New_train_model / SVM / ensemble_cov_corr_SVM.py
+Ora ho tutti i risultati separati per cartelle in base al numero di nodi. 
+Anche i relativi file di plot (e di training) sono scritti in maniera da considerare le cartelle num_nodes.
+Per la versione finale dobbiamo scegliere un solo num_nodes,
+giustificarlo, inserire nei results GitHub una sola scelta e anche cambiate tutti i codici.
 

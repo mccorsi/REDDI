@@ -8,11 +8,13 @@ import sys
 # Used to produce figure 6B
 ###################################
 
-json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
+#json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
+nodes = 78
+json_path = f'Results_new/num_nodes_{nodes}/logs/Corr_Mat/TSClassifier/probabilities.json'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 #print( current_dir)
 json_path = os.path.join(current_dir, "..","..",json_path)
-save_dir = os.path.join(current_dir, "..","..","Images")
+save_dir = os.path.join(current_dir, "..","..","Images/")
 os.makedirs(save_dir, exist_ok=True)
 
 # Load data
@@ -83,6 +85,8 @@ for i in range(num_classes):
     for j in range(num_classes):
         plt.text(j, i, f"{avg_probs[i, j]*100:.1f}%", ha="center", va="center", color="black")
 
-plt.savefig(save_dir + "TSClassifier_average_probabilities.png", bbox_inches='tight')
+plt.title(f"Num nodes {nodes}", fontsize=14)
+plt.savefig(save_dir + f"TSClassifier_average_probabilities_nodes_{nodes}.png", bbox_inches='tight')
+print("Figure saved to:", save_dir + f"TSClassifier_average_probabilities_nodes_{nodes}.png")
 
 plt.show()

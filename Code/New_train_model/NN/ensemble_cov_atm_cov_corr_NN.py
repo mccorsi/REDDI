@@ -7,6 +7,7 @@ import os
 import sys
 import numpy as np
 import warnings
+import json
 warnings.filterwarnings('ignore')
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +21,7 @@ from utils import load_cov_mats, load_atms, load_corr_mats
 
 
 # ===============================================================
-# Neural network architectures (identiche agli altri script NN)
+# Neural network architectures
 # ===============================================================
 def build_simple_nn(input_dim, num_classes):
     model = Sequential([
@@ -56,16 +57,8 @@ def build_deep_nn(input_dim, num_classes):
 
 
 # ===============================================================
-# Adapter: rende un modello Keras utilizzabile come model1 / model2
-# dentro EnsembleClassifier, che chiama .fit(X, y) e .predict_proba(X).
-#
-# EnsembleClassifier.fit() riusa gli stessi oggetti model1/model2 per
-# tutti i fold della CV (model1.fit(...) viene chiamato una volta per
-# fold sulla *stessa* istanza). Per un modello sklearn (es. LDA) va bene,
-# perché .fit() reinizializza sempre i parametri interni. Per una rete
-# neurale i pesi persisterebbero da un fold all'altro, quindi questo
-# wrapper ricostruisce la rete da zero (build_fn) ad ogni chiamata di
-# .fit() -- così riusare la stessa istanza tra i fold è sicuro.
+# Adapter: Keras models become usable as model1 / model2
+# of EnsembleClassifier. Adapted to .fit(X, y) and .predict_proba(X).
 # ===============================================================
 class KerasEnsembleModel:
     build_fn = None    # impostata dalla sottoclasse
@@ -103,8 +96,7 @@ NN_ARCHITECTURES = {
 
 
 # ===============================================================
-# Caricamento dati una sola volta (non dipende da num_nodes,
-# non serve ricaricarlo ad ogni iterazione del ciclo)
+# Load my Data
 # ===============================================================
 data_path = os.path.join(current_dir, "..", "..", "..", "data", "features")
 
@@ -164,3 +156,106 @@ for num_nodes in [20, 35, 50,78]:
 
             cv_scores = ensemble.get_cv_scores()
             print(f"[{num_nodes} | {pair_name} | {arch_name}] Cross-validation scores: {cv_scores}")
+
+
+# =====================================================================
+# Convert Results in an appropriate format for the benchmark plots
+# =====================================================================
+# Folder containing the current (old-format) results
+old_results = "Results_new"
+
+# Folder where the standardized results will be saved
+new_results = "Results_new"
+
+os.makedirs(new_results, exist_ok=True)
+
+# ------------------------------------------------------
+# Search recursively for SimpleNN and DeepNN folders
+# ------------------------------------------------------
+for root, dirs, files in os.walk(old_results):
+
+    # Process ONLY folders named SimpleNN or DeepNN
+    model_name = os.path.basename(root)
+    if model_name not in ["SimpleNN", "DeepNN"]:
+        continue
+
+    # Skip if metrics.json does not exist
+    if "metrics.json" not in files:
+        #print(f"Skipping {root}: metrics.json not found.")
+        continue
+
+    metrics_file = os.path.join(root, "metrics.json")
+
+    # ------------------------------------------------------
+    # Load metrics
+    # ------------------------------------------------------
+    with open(metrics_file, "r") as f:
+        metrics = json.load(f)
+
+    train_metrics = metrics["train_metrics_ensemble"]
+    val_metrics = metrics["validation_metrics_ensemble"]
+
+    # ------------------------------------------------------
+    # Extract arrays (same format as sklearn.cross_validate)
+    # ------------------------------------------------------
+    bal_acc_train = np.array([fold["balanced_accuracy"] for fold in train_metrics])
+
+    bal_acc_val = np.array([fold["balanced_accuracy"] for fold in val_metrics])
+
+    f1_train = np.array([fold["f1_macro"] for fold in train_metrics])
+
+    f1_val = np.array([fold["f1_macro"] for fold in val_metrics])
+
+    # ------------------------------------------------------
+    # Build output directory
+    #
+    # Example:
+    # Results_new/num_nodes_20/logs/COV+ATM/SimpleNN
+    #
+    # becomes
+    #
+    # Results_new/NN/num_nodes_20/COV+ATM/SimpleNN
+    # ------------------------------------------------------
+    relative = os.path.relpath(root, old_results)
+
+    parts = relative.split(os.sep)
+
+    # Remove "logs" if present
+    parts = [p for p in parts if p != "logs"]
+
+    # Insert "NN" after the num_nodes_* folder
+    if len(parts) >= 2:
+        parts.insert(1, "NN")
+
+    out_dir = os.path.join(new_results, *parts)
+    os.makedirs(out_dir, exist_ok=True)
+
+    # ------------------------------------------------------
+    # Save in standardized format
+    # ------------------------------------------------------
+    np.save(os.path.join(out_dir, "cv_balanced_accuracy_train.npy"),
+        bal_acc_train)
+
+    np.save(os.path.join(out_dir, "cv_balanced_accuracy_val.npy"),
+        bal_acc_val)
+
+    np.save(os.path.join(out_dir, "cv_f1_train.npy"),
+        f1_train)
+
+    np.save(os.path.join(out_dir, "cv_f1_val.npy"),
+        f1_val)
+
+    # ------------------------------------------------------
+    # Print summary
+    # ------------------------------------------------------
+    print(f"\nConverted: {relative}")
+    print(f"  Balanced Accuracy (val): "
+        f"{bal_acc_val.mean():.4f} ± {bal_acc_val.std():.4f}")
+    print(f"  Balanced Accuracy (train): "
+        f"{bal_acc_train.mean():.4f} ± {bal_acc_train.std():.4f}")
+    print(f"  F1 (val): "
+        f"{f1_val.mean():.4f} ± {f1_val.std():.4f}")
+    print(f"  F1 (train): "
+        f"{f1_train.mean():.4f} ± {f1_train.std():.4f}")
+
+print("\nDone! All SimpleNN and DeepNN results have been converted.")
