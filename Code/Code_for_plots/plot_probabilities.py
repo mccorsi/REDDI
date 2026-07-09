@@ -84,7 +84,7 @@ for i in range(num_classes):
     for j in range(num_classes):
         plt.text(j, i, f"{avg_probs[i, j]*100:.1f}%", ha="center", va="center", color="black")
 
-plt.title(f"Num nodes {nodes}", fontsize=14)
+#plt.title(f"Num nodes {nodes}", fontsize=14)
 plt.savefig(save_dir + f"TSClassifier_average_probabilities_nodes_{nodes}.png", bbox_inches='tight')
 print("Figure saved to:", save_dir + f"TSClassifier_average_probabilities_nodes_{nodes}.png")
 
