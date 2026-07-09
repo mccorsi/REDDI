@@ -8,9 +8,8 @@ import sys
 # Used to produce figure 6B
 ###################################
 
-#json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
-nodes = 78
-json_path = f'Results_new/num_nodes_{nodes}/logs/Corr_Mat/TSClassifier/probabilities.json'
+nodes = 50
+json_path = f'Results/num_nodes_{nodes}/logs/Corr_Mat/TSClassifier/probabilities.json'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 #print( current_dir)
 json_path = os.path.join(current_dir, "..","..",json_path)

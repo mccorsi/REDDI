@@ -98,7 +98,7 @@ class FC_DimRed(TransformerMixin, BaseEstimator):
         node_strength = np.sum(thresh_mask, axis=0)
         self.node_strength_ = node_strength 
         idx = np.argsort(-node_strength)
-        self.node_select_ = np.sort(idx[:self.nb_nodes])
+        self.node_select_ = idx[:self.nb_nodes]
 
         return self
 
