@@ -10,11 +10,12 @@ import sys
 # Used to produce figure 6C
 ###################################
 
-json_path = 'Results/logs/Corr_Mat/TSClassifier/probabilities.json'
+nodes = 50
+json_path = f'Results/num_nodes_{nodes}/logs/Corr_Mat/TSClassifier/probabilities.json'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 #print( current_dir)
 json_path = os.path.join(current_dir, "..","..",json_path)
-save_dir = os.path.join(current_dir, "..","..","Images")
+save_dir = os.path.join(current_dir, "..","..","Images/")
 #print(json_path)
 os.makedirs(save_dir, exist_ok=True)
 
@@ -71,8 +72,9 @@ plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('ROC Curves for Final Predictions')
+plt.title(f'ROC Curves for Final Predictions')
 plt.legend(loc='lower right')
 plt.tight_layout()
-plt.savefig(save_dir+"TSClassifier_roc_curves_final_predictions.png")
+plt.savefig(save_dir+f"TSClassifier_roc_curves_final_predictions_nodes_{nodes}.png")
+print("Figure saved to:", save_dir+f"TSClassifier_roc_curves_final_predictions_nodes_{nodes}.png")
 plt.show()

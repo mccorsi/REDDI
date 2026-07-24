@@ -4,6 +4,8 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import json
+from select_features import FC_DimRed
+from utils import upper_triangular_flatten
 
 class EnsembleClassifier:
     def __init__(self, model1, model2, metrics=None, feature_names=['covariance_matrices', 'atms']):
@@ -31,7 +33,7 @@ class EnsembleClassifier:
         self.train_metrics_1 = [] 
         self.train_metrics_2 = [] 
 
-    def fit(self, X_1, X_2, y, cv):
+    def fit(self, X_1, X_2, y, cv, num_nodes_feat_selection=None, threshold_feat_selection=None, riemanian_classifier=False):
         self.models_1 = []
         self.models_2 = []
 
@@ -46,9 +48,35 @@ class EnsembleClassifier:
         self.oof_probabilities_2 = np.zeros((len(y), 4))
 
         for fold, (train_idx, val_idx) in enumerate(cv.split(X_1, y)):
+            
+
             X_1_train, X_1_val = X_1[train_idx], X_1[val_idx]
             X_2_train, X_2_val = X_2[train_idx], X_2[val_idx]
             y_train, y_val = y[train_idx], y[val_idx]
+
+            if len(X_1_train.shape) == 3:
+                # If the input is 3D (e.g., FC matrices), we perform dimensionality reduction before flattening
+                # Dimensionality reduction
+                dim_red_eta_1 = FC_DimRed(eta_threshold=threshold_feat_selection, nb_nodes=num_nodes_feat_selection)
+                X_1_train = dim_red_eta_1.fit_transform(X_1_train, y_train, metric='eta-squared')
+                X_1_val = dim_red_eta_1.transform(X_1_val)
+                print(f"Selected nodes First Matrices: {dim_red_eta_1.node_select_}")
+
+                dim_red_eta_2 = FC_DimRed(eta_threshold=threshold_feat_selection, nb_nodes=num_nodes_feat_selection)
+                X_2_train = dim_red_eta_2.fit_transform(X_2_train, y_train, metric='eta-squared')
+                X_2_val = dim_red_eta_2.transform(X_2_val)
+                print(f"Selected nodes Second Matrices: {dim_red_eta_2.node_select_}")
+
+                if riemanian_classifier == False:
+                    # Flatten the matrices after dimensionality reduction
+                    print("Dimension of First Matrices before flattening: ", X_1_train.shape)
+                    print("Dimension of Second Matrices before flattening: ", X_2_train.shape)
+                    X_1_train = np.array([upper_triangular_flatten(mat) for mat in X_1_train])
+                    X_2_train = np.array([upper_triangular_flatten(mat) for mat in X_2_train])
+                    X_1_val = np.array([upper_triangular_flatten(mat) for mat in X_1_val])
+                    X_2_val = np.array([upper_triangular_flatten(mat) for mat in X_2_val])
+                    print("Dimension of First Matrices after flattening: ", X_1_train.shape)
+                    print("Dimension of Second Matrices after flattening: ", X_2_train.shape)
 
             # Train each model on their respective feature sets
             model1 = self.model1
@@ -56,6 +84,7 @@ class EnsembleClassifier:
 
             model1.fit(X_1_train, y_train)
             model2.fit(X_2_train, y_train)
+
             # Store the trained models for each fold
             self.models_1.append(model1)
             self.models_2.append(model2)
